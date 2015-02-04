@@ -16,6 +16,12 @@ public class Node {
 		right = r;
 	}
 	
+	public Node getLeft() {
+		return left;
+	}
 	
+	public Node getRight() {
+		return right;
+	}
 	
 }
