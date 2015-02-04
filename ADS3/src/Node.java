@@ -1,8 +1,14 @@
 
 public class Node {
-	int data;
-	Node left = null;
-	Node right = null;
+	private int data;
+	private Node left = null;
+	private Node right = null;
+	
+	public Node() {
+		data = 0;
+		left = null;
+		right = null;
+	}
 	
 	public Node(int data) {
 		this.data = data;
@@ -14,6 +20,14 @@ public class Node {
 	
 	public void setRight(Node r) {
 		right = r;
+	}
+	
+	public void setData(int data) {
+		this.data = data;
+	}
+	
+	public int getData() {
+		return this.data;
 	}
 	
 	public Node getLeft() {
