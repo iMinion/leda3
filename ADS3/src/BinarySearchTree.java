@@ -45,7 +45,7 @@ public class BinarySearchTree {
 		if(root != null) {
 			inOrder(root.getLeft());
 			sb.append(Integer.toString(root.getData()));
-			sb.append(" ");
+			sb.append(",");
 			inOrder(root.getRight());
 		}
 	}
@@ -62,15 +62,53 @@ public class BinarySearchTree {
 			postOrder(root.getLeft());
 			postOrder(root.getRight());
 			sb.append(Integer.toString(root.getData()));
-			sb.append(" ");
+			sb.append(",");
 		}
 	}
 	
+	public void removeNode(int data) {
+		removeNode(root, data, null);
+	}
+	
+	public  void removeNode(Node node,int data,Node prev){	
+		if(node.getData() == data){
+			if(node.getLeft() == null && node.getRight() ==null){
+				if(prev.getData()>node.getData()){
+					prev.setLeft(null);
+				}else prev.setRight(null);
+			}else if(node.getRight() == null){
+				if(prev.getData() > node.getData()){
+					prev.setLeft(node.getLeft());
+				}else prev.setRight(node.getLeft());
+			}else if(node.getLeft() == null){
+				if(prev.getData()>node.getData()){
+					prev.setLeft(node.getRight());
+				}else prev.setRight(node.getRight());
+			}else{
+				Node temp=node.getLeft();
+				Node tmpPrev=null;
+				while(temp.getRight() != null){
+					tmpPrev=temp;
+					temp=temp.getRight();
+				}
+				node.setData(temp.getData());
+				tmpPrev.setRight(null);
+			}
+		}else if(node.getData() > data){
+			prev=node;
+			removeNode(node.getLeft(),data,prev);
+		}else{
+			prev=node;
+			removeNode(node.getRight(),data,prev);
+		}
+	}
+
 	public String search(int data) {
 		sb = new StringBuilder();
 		count = 0;
-		sb.append(search(root, new Node(data), null));
-		sb.append(", ");
+		Node temp =new Node(data);
+		sb.append(search(root, temp, null));
+		sb.append(",");
 		sb.append(count);
 		return sb.toString();
 	}
@@ -84,10 +122,16 @@ public class BinarySearchTree {
 		else {
 			count++;
 			if(root.getData() > node.getData()) {
-				return search(root.getLeft(), node, root);
+				if(root.getLeft() != null) {
+					if(root.getLeft().getData() > node.getData())  { prev = root.getLeft(); } 
+				}
+				return search(root.getLeft(), node, prev);
 			}
 			else if(root.getData() < node.getData()) {
-				return search(root.getRight(), node, root);
+				if(root.getRight() != null) {
+					if(root.getRight().getData() > node.getData()) { prev = root.getRight(); }
+				}
+				return search(root.getRight(), node, prev);
 			}
 			else {
 				return true;
@@ -102,12 +146,20 @@ public class BinarySearchTree {
 	public static void main(String[] args) {
 		BinarySearchTree bst = new BinarySearchTree();
 		Scanner sc = new Scanner(System.in);
-		String str[] = sc.nextLine().split(", ");
+		String str[] = sc.nextLine().split(",");
 		for(int i = 0; i < str.length; ++i) {
-			bst.insert(Integer.parseInt(str[i]));
-			System.out.println(bst.inOrder());
+			if(str[i].charAt(0) == 'I') {
+				bst.insert(Integer.parseInt(str[i].substring(1))); 
+				System.out.println(bst.inOrder());
+			}
+			else if(str[i].charAt(0) == 'R') {
+				bst.removeNode(Integer.parseInt(str[i].substring(1)));
+				System.out.println(bst.postOrder());
+			}
+			else {
+				System.out.println(bst.search(Integer.parseInt(str[i].substring(1))));
+			}
 		}
-		System.out.println(bst.search(2));
 		sc.close();
 	}
 }
