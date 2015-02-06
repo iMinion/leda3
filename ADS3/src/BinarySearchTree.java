@@ -113,25 +113,25 @@ public class BinarySearchTree {
 		return sb.toString();
 	}
 	
-	public boolean search(Node root, Node node, Node prev) {
-		if(root == null || node == null) {
-			if(prev == null) count = 0;
-			else count = prev.getData();
+	public boolean search(Node trav, Node node, Node temp) {
+		if(trav == null || node == null) {
+			if(temp == null) count = 0;
+			else count = temp.getData();
 			return false;
 		}
 		else {
 			count++;
-			if(root.getData() > node.getData()) {
-				if(root.getLeft() != null) {
-					if(root.getLeft().getData() > node.getData())  { prev = root.getLeft(); } 
+			if(trav.getData() > node.getData()) {
+				if(trav.getLeft() != null) {
+					if(trav.getLeft().getData() > node.getData())  { temp = trav.getLeft(); } 
 				}
-				return search(root.getLeft(), node, prev);
+				return search(trav.getLeft(), node, temp);
 			}
-			else if(root.getData() < node.getData()) {
-				if(root.getRight() != null) {
-					if(root.getRight().getData() > node.getData()) { prev = root.getRight(); }
+			else if(trav.getData() < node.getData()) {
+				if(trav.getRight() != null) {
+					if(trav.getRight().getData() > node.getData()) { temp = trav.getRight(); }
 				}
-				return search(root.getRight(), node, prev);
+				return search(trav.getRight(), node, temp);
 			}
 			else {
 				return true;
